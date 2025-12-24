@@ -1,16 +1,25 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JDK-11'
-        maven 'Maven-3.9'
-    }
-
     stages {
-        stage('Build Java App') {
+
+        stage('Checkout') {
             steps {
-                echo 'Building Java application from GitHub'
-                bat 'mvn clean package'
+                deleteDir()
+                git branch: 'main',
+                    url: 'https://github.com/hasiniraga/sample-java-application.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'mvn clean compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'mvn test'
             }
         }
     }
